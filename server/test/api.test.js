@@ -11,8 +11,8 @@ let tmplDir;
 const blankTemplate = `\\documentclass[11pt,a4paper]{article}\n\\begin{document}\nHello.\n\\end{document}\n`;
 
 beforeAll(async () => {
-  dataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'preleaf-data-'));
-  tmplDir = fs.mkdtempSync(path.join(os.tmpdir(), 'preleaf-tmpl-'));
+  dataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'kalamos-data-'));
+  tmplDir = fs.mkdtempSync(path.join(os.tmpdir(), 'kalamos-tmpl-'));
   for (const name of ['blank', 'article', 'report']) {
     fs.mkdirSync(path.join(tmplDir, name));
   }
@@ -20,8 +20,8 @@ beforeAll(async () => {
   fs.writeFileSync(path.join(tmplDir, 'article', 'main.tex'), blankTemplate);
   fs.writeFileSync(path.join(tmplDir, 'report', 'main.tex'), blankTemplate);
 
-  process.env.PRELEAF_PROJECTS = dataDir;
-  process.env.PRELEAF_TEMPLATES = tmplDir;
+  process.env.KALAMOS_PROJECTS = dataDir;
+  process.env.KALAMOS_TEMPLATES = tmplDir;
 
   const { createApp } = await import('../src/app.js');
   request = supertest(createApp().app);

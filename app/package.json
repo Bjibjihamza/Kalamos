@@ -1,5 +1,5 @@
 {
-  "name": "preleaf-app",
+  "name": "kalamos-app",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
+    "kalamos": "file:..",
     "monaco-editor": "^0.52.2",
     "pdfjs-dist": "^6.2.108",
-    "preleaf": "file:..",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "socket.io-client": "^4.8.1"

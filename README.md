@@ -1,7 +1,9 @@
-# Preleaf
+# Kalamos
 
 A local Overleaf-style LaTeX report workspace. Edit LaTeX in a web UI with a
 Monaco editor, auto-save, and live PDF preview — compilation runs in Docker.
+
+*Kalamos* (κάλαμος) is the Greek reed pen — the original instrument of writing.
 
 ## Quick start (Docker — recommended)
 
@@ -24,10 +26,16 @@ npm run dev       # server on :4000 + Vite dev server on :5173
 docker compose up -d latex   # latex compile container (needed to compile)
 ```
 
+## Tests
+
+```bash
+npm test          # server API tests (vitest + supertest) + app tests (vitest + testing-library)
+```
+
 ## Structure
 
 ```
-app/          React + Vite frontend (Monaco editor, file tree, PDF preview)
+app/          React + Vite frontend (Monaco editor, file tree, PDF viewer)
 server/       Express API + Socket.IO (projects, files, compile, synctex)
 templates/    Project templates: report (thesis-style), article, blank
 projects/     User projects (gitignored, persisted on host)
@@ -37,13 +45,25 @@ docker-compose.yml
 
 ## Features
 
+- Project dashboard: search, sort, relative timestamps, skeletons
 - Project management: create, list, open, rename, duplicate, delete
-- File explorer with create / rename / delete / upload
-- Monaco editor with tabs and debounced auto-save
-- LaTeX compilation in a TeX Live Docker container (latexmk, bibtex, SyncTeX)
-- Live PDF preview with reload on successful compile
+- File explorer with context menu, file search, rename, delete, upload
+- Monaco editor with tabs, debounced auto-save, and inline compile diagnostics
+- LaTeX compilation in a TeX Live Docker container (pdflatex **and** XeLaTeX,
+  latexmk, biber, SyncTeX)
+- pdf.js PDF viewer: zoom, pagination, download, and SyncTeX click-to-source
+- Command palette (Ctrl+K), keyboard shortcuts, toast notifications
 - Live compile log with parsed errors / warnings
-- SyncTeX jump: PDF ↔ source
+
+## Keyboard shortcuts
+
+| Action | Keys |
+|---|---|
+| Recompile | `Ctrl + Enter` |
+| Save all | `Ctrl + S` |
+| Command palette | `Ctrl + K` |
+| Forward search (PDF) | `Ctrl + Click` in editor |
+| Jump to source | Click on the PDF |
 
 ## API overview
 

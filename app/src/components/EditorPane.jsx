@@ -33,7 +33,7 @@ export default function EditorPane({ activeTab, onEdit, diagnostics, onCursorCha
           startColumn: 1,
           endColumn: Number.MAX_SAFE_INTEGER,
         }));
-      monaco.editor.setModelMarkers(model, 'preleaf', markers);
+      monaco.editor.setModelMarkers(model, 'kalamos', markers);
     }
   }, [diagnostics, path]);
 
@@ -44,7 +44,7 @@ export default function EditorPane({ activeTab, onEdit, diagnostics, onCursorCha
           path={path}
           value={activeTab.content}
           language={language}
-          theme="preleaf-dark"
+          theme="kalamos-dark"
           beforeMount={defineLanguages}
           onMount={(editor, monaco) => {
             monacoRef.current = monaco;
@@ -92,7 +92,7 @@ function normalize(p) {
 function defineLanguages(monaco) {
   if (monaco.languages.getLanguages().some((l) => l.id === 'latex')) return;
 
-  monaco.editor.defineTheme('preleaf-dark', {
+  monaco.editor.defineTheme('kalamos-dark', {
     base: 'vs-dark',
     inherit: true,
     rules: [

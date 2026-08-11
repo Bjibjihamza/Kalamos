@@ -19,6 +19,7 @@ export default function PdfPane({ slug, pdfKey, compileState, focusPage, onSynct
   const containerRef = useRef(null);
   const scrollerRef = useRef(null);
   const pdfRef = useRef(null);
+  const loadingTaskRef = useRef(null);
   const canvasRefs = useRef(new Map());
   const unitWidths = useRef({});
   const renderToken = useRef(0);
@@ -37,14 +38,16 @@ export default function PdfPane({ slug, pdfKey, compileState, focusPage, onSynct
     setPageCount(0);
     setCurrentPage(1);
     setZoom(null);
-    pdfRef.current?.destroy();
+    loadingTaskRef.current?.destroy();
+    loadingTaskRef.current = null;
     pdfRef.current = null;
     const src = api.pdfUrl(slug, pdfKey);
-    pdfjsLib
-      .getDocument({ url: src })
-      .promise.then((doc) => {
+    const task = pdfjsLib.getDocument({ url: src });
+    loadingTaskRef.current = task;
+    task.promise
+      .then((doc) => {
         if (token !== renderToken.current) {
-          doc.destroy();
+          task.destroy();
           return;
         }
         pdfRef.current = doc;

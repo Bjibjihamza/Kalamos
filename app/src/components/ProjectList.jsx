@@ -108,7 +108,7 @@ export default function ProjectList({ onOpen }) {
       <header className="home-header">
         <h1 className="logo">
           <span className="logo-mark"><LeafIcon size={14} /></span>
-          preleaf
+          kalamos
         </h1>
         <div className="search-box">
           <SearchIcon size={14} />

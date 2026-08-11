@@ -1,4 +1,4 @@
-# Preleaf full application image.
+# Kalamos full application image.
 # Builds the React frontend, bundles the Express server, and installs the
 # docker CLI so the server can drive the latex compile container via the
 # mounted host docker socket.

@@ -1,5 +1,5 @@
 #!/bin/sh
-# latexmk wrapper used by the preleaf latex container.
+# latexmk wrapper used by the kalamos latex container.
 # It configures a sane default output directory (.build) unless the caller
 # already passed an -outdir argument.
 set -eu

@@ -3,23 +3,23 @@ services:
     build:
       context: .
       dockerfile: .docker/Dockerfile
-    image: preleaf-latex
-    container_name: preleaf-latex
+    image: kalamos-latex
+    container_name: kalamos-latex
     restart: unless-stopped
     volumes:
       - ./projects:/projects
 
-  preleaf:
+  kalamos:
     build:
       context: .
       dockerfile: .docker/Dockerfile.app
-    container_name: preleaf
+    container_name: kalamos
     restart: unless-stopped
     depends_on:
       - latex
     environment:
-      - PRELEAF_LATEX_CONTAINER=preleaf-latex
-      - PRELEAF_PORT=4000
+      - KALAMOS_LATEX_CONTAINER=kalamos-latex
+      - KALAMOS_PORT=4000
     ports:
       - "4000:4000"
     volumes:

@@ -85,7 +85,11 @@ async function runCompile(job) {
 
   const args = [
     'exec', '-w', `/projects/${slug}`, DOCKER_CONTAINER,
-    'latexmk', '-pdf', '-interaction=nonstopmode', '-synctex=1',
+    'latexmk',
+    // If the project ships its own .latexmkrc (e.g. XeLaTeX projects), let
+    // latexmk honour its engine settings instead of forcing pdflatex.
+    ...(fs.existsSync(path.join(root, '.latexmkrc')) ? [] : ['-pdf']),
+    '-interaction=nonstopmode', '-synctex=1',
     `-outdir=${BUILD_DIR}`, mainFile,
   ];
 

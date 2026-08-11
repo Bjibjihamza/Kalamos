@@ -8,7 +8,7 @@ import * as compile from '../services/compile.js';
 import * as synctex from '../services/synctex.js';
 import { buildDir } from '../services/compile.js';
 
-const upload = multer({ dest: path.join(process.env.TEMP || '/tmp', 'preleaf-uploads') });
+const upload = multer({ dest: path.join(process.env.TEMP || '/tmp', 'kalamos-uploads') });
 
 const router = Router();
 
