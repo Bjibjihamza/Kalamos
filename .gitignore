@@ -1,0 +1,12 @@
+node_modules/
+app/dist/
+dist/
+server/dist/
+.data/
+projects/*
+!projects/.gitkeep
+.docker/build/
+.env
+.DS_Store
+Thumbs.db
+*.log
