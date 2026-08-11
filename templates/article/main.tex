@@ -1,0 +1,55 @@
+% ======================================================================
+%  Preleaf article template
+% ======================================================================
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[english]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage[hidelinks]{hyperref}
+
+\title{Your Article Title}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+  A short summary of the article.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:introduction}
+
+Start writing here. Use \texttt{label} and \texttt{ref} for cross-references,
+e.g.\ see Section~\ref{sec:introduction}.
+
+\section{Main Body}
+\label{sec:body}
+
+LaTeX math is easy inline: $E = mc^2$, or displayed:
+
+\begin{equation}
+  \int_0^\infty e^{-x^2}\,dx = \frac{\sqrt{\pi}}{2}.
+\end{equation}
+
+\subsection{Figures}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\linewidth]{example-image}
+  \caption{Example image.}
+  \label{fig:example}
+\end{figure}
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+Wrap up the article.
+
+\end{document}

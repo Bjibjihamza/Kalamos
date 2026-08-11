@@ -38,7 +38,7 @@ async function drain() {
   running = false;
 }
 
-function buildDir(slug) {
+export function buildDir(slug) {
   return path.join(projectPath(slug), BUILD_DIR);
 }
 

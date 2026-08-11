@@ -15,6 +15,7 @@ const io = new Server(server, { cors: { origin: '*' } });
 
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
+app.use(express.text({ type: 'text/plain', limit: '50mb' }));
 app.use('/api', apiRouter);
 
 fs.mkdirSync(PROJECTS_DIR, { recursive: true });

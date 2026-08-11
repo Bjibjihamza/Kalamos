@@ -1,0 +1,113 @@
+% ======================================================================
+%  Preleaf thesis-style report template
+%  Structure: title page, abstract, table of contents, numbered chapters,
+%  references. Edit the metadata below and start writing in chapters/.
+% ======================================================================
+\documentclass[12pt,a4paper,oneside]{report}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage{csquotes}
+
+% --- Metadata ---------------------------------------------------------
+\newcommand{\thesistitle}{Your Thesis Title Here}
+\newcommand{\thesisauthor}{Your Name}
+\newcommand{\thesisyear}{2026}
+\newcommand{\thesissupervisor}{Supervisor}
+\newcommand{\thesisschool}{University / School Name}
+
+\begin{document}
+
+% ============================= Title page =============================
+\begin{titlepage}
+  \centering
+  \vspace*{2cm}
+  {\large \thesisschool\par}
+  \vspace{3cm}
+  {\Huge\bfseries \thesistitle\par}
+  \vspace{1.5cm}
+  {\large \thesisauthor\par}
+  \vspace{1cm}
+  {\large Supervisor: \thesissupervisor\par}
+  \vfill
+  {\large \thesisyear\par}
+\end{titlepage}
+
+% ============================= Abstract ===============================
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+Write a concise summary of the work: the problem, the approach taken, and
+the main results. This page is optional --- remove the \texttt{abstract}
+chapter if you do not need one.
+
+% ========================= Table of contents ==========================
+\tableofcontents
+\newpage
+
+% ============================ Chapters ================================
+\chapter{Introduction}
+\label{ch:introduction}
+
+This is the introduction. Motivate the topic, state the research question,
+and outline the structure of the document. Include a \texttt{label} on
+every chapter so you can cross-reference it, e.g.\ Chapter~\ref{ch:introduction}.
+
+\section{Problem statement}
+Describe the problem being addressed.
+
+\section{Contributions}
+List the main contributions of this work.
+
+\chapter{Background and Related Work}
+\label{ch:background}
+
+Summarize relevant literature and prior work in this area. Use
+\cite{knuth1984tex} for citations --- see \texttt{thesis.bib}.
+
+\chapter{Methodology}
+\label{ch:methodology}
+
+Explain the methods, models, or experiments used.
+
+\section{Data}
+Describe the data sources.
+
+\section{Experimental setup}
+Describe parameters, hardware, and evaluation criteria.
+
+\chapter{Results and Discussion}
+\label{ch:results}
+
+Present results, ideally in tables or figures:
+
+\begin{table}[h]
+  \centering
+  \caption{Example results table.}
+  \begin{tabular}{lcc}
+    \toprule
+    Method & Accuracy & F1 \\
+    \midrule
+    Baseline & 0.71 & 0.68 \\
+    Proposed & 0.84 & 0.81 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\chapter{Conclusion}
+\label{ch:conclusion}
+
+Summarize the findings, limitations, and directions for future work.
+
+% ============================= References =============================
+\bibliographystyle{plain}
+\bibliography{thesis}
+
+\end{document}

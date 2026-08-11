@@ -1,0 +1,20 @@
+#!/bin/sh
+# latexmk wrapper used by the preleaf latex container.
+# It configures a sane default output directory (.build) unless the caller
+# already passed an -outdir argument.
+set -eu
+
+outdir=".build"
+for arg in "$@"; do
+  case "$arg" in
+    -outdir=*) outdir="${arg#-outdir=}" ;;
+  esac
+done
+
+exec latexmk \
+  -pdf \
+  -interaction=nonstopmode \
+  -synctex=1 \
+  -halt-on-error \
+  "-outdir=$outdir" \
+  "$@"

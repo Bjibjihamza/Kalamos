@@ -1,0 +1,27 @@
+services:
+  latex:
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+    image: preleaf-latex
+    container_name: preleaf-latex
+    restart: unless-stopped
+    volumes:
+      - ./projects:/projects
+
+  preleaf:
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile.app
+    container_name: preleaf
+    restart: unless-stopped
+    depends_on:
+      - latex
+    environment:
+      - PRELEAF_LATEX_CONTAINER=preleaf-latex
+      - PRELEAF_PORT=4000
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./projects:/app/projects
+      - /var/run/docker.sock:/var/run/docker.sock
