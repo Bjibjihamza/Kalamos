@@ -50,7 +50,15 @@ export function pdfToSource(slug, { page, x, y, pdf = `${DEFAULT_MAIN.replace(/\
   const result = run(slug, ['synctex', 'edit', '-o', `${page}:${x}:${y}:${pdfRel}`, '-d', '-1']);
   const block = result.blocks && result.blocks[0];
   if (!block) throw new HttpError(404, 'No SyncTeX match');
-  return { file: block.Input || null, line: block.Line ? parseInt(block.Line, 10) : null, block };
+  return { file: toRelativePath(slug, block.Input) || null, line: block.Line ? parseInt(block.Line, 10) : null, block };
+}
+
+function toRelativePath(slug, input) {
+  if (typeof input !== 'string') return null;
+  const prefix = `/projects/${slug}/`;
+  let rel = input.startsWith(prefix) ? input.slice(prefix.length) : input;
+  rel = rel.replace(/^\.\//, '').replace(/\/\.\//g, '/');
+  return rel || null;
 }
 
 // source line -> PDF (forward / "view")

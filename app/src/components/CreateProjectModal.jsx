@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { api } from '../lib/api.js';
+import Modal from './ui/Modal.jsx';
+import { useToast } from '../context/ToastContext.jsx';
+import { SpinnerIcon } from './icons.jsx';
 
 const TEMPLATE_INFO = {
-  report: { label: 'Rapport / mémoire', desc: 'Structure type mémoire (chapitres, biblio, figures)' },
-  article: { label: 'Article', desc: 'Article scientifique compact' },
-  blank: { label: 'Vierge', desc: 'Un simple main.tex vide' },
+  report: { label: 'Report / thesis', desc: 'Thesis-style structure with chapters, bibliography and figures' },
+  article: { label: 'Article', desc: 'Compact scientific article' },
+  blank: { label: 'Blank', desc: 'A minimal main.tex' },
 };
 
 export default function CreateProjectModal({ templates, onClose, onCreated }) {
@@ -12,14 +15,16 @@ export default function CreateProjectModal({ templates, onClose, onCreated }) {
   const [template, setTemplate] = useState('report');
   const [error, setError] = useState(null);
   const [busy, setBusy] = useState(false);
+  const toast = useToast();
 
   async function submit(e) {
     e.preventDefault();
-    if (!name.trim()) return;
+    if (!name.trim() || busy) return;
     setBusy(true);
     setError(null);
     try {
       const p = await api.createProject({ name: name.trim(), template });
+      toast.success(`Project “${p.name}” created`);
       onCreated(p.slug);
     } catch (err) {
       setError(err.message);
@@ -28,9 +33,20 @@ export default function CreateProjectModal({ templates, onClose, onCreated }) {
   }
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <form className="modal" onClick={(e) => e.stopPropagation()} onSubmit={submit}>
-        <h2>New project</h2>
+    <Modal
+      title="New project"
+      onClose={onClose}
+      footer={
+        <>
+          <button type="button" className="btn" onClick={onClose}>Cancel</button>
+          <button type="submit" className="btn primary" form="create-project-form" disabled={busy || !name.trim()}>
+            {busy ? <SpinnerIcon size={14} /> : null}
+            {busy ? 'Creating' : 'Create'}
+          </button>
+        </>
+      }
+    >
+      <form id="create-project-form" onSubmit={submit}>
         <label className="field">
           <span>Project name</span>
           <input
@@ -58,13 +74,7 @@ export default function CreateProjectModal({ templates, onClose, onCreated }) {
           </div>
         </div>
         {error && <div className="error-box">{error}</div>}
-        <div className="modal-actions">
-          <button type="button" className="btn" onClick={onClose}>Cancel</button>
-          <button type="submit" className="btn primary" disabled={busy || !name.trim()}>
-            {busy ? 'Creating…' : 'Create'}
-          </button>
-        </div>
       </form>
-    </div>
+    </Modal>
   );
 }

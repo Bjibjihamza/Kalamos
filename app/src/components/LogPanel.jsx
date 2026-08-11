@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { XIcon } from './icons.jsx';
 
 export default function LogPanel({ compile, onClose, onJump }) {
   const boxRef = useRef(null);
@@ -16,11 +17,13 @@ export default function LogPanel({ compile, onClose, onJump }) {
     <div className="log-panel">
       <div className="log-header">
         <div className="log-tabs">
+          <span className="log-tab">Log</span>
           {errors.length > 0 && <span className="log-tab err">{errors.length} errors</span>}
           {warnings.length > 0 && <span className="log-tab warn">{warnings.length} warnings</span>}
-          <span className="log-tab">log</span>
         </div>
-        <button className="icon-btn" onClick={onClose}>×</button>
+        <button className="icon-btn" title="Close log" onClick={onClose}>
+          <XIcon size={14} />
+        </button>
       </div>
       {errors.length > 0 && (
         <div className="error-list">

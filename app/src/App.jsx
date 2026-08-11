@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ProjectList from './components/ProjectList.jsx';
 import Editor from './components/Editor.jsx';
+import { useHashRoute, parseRoute, navigate } from './lib/router.js';
 
 export default function App() {
-  const [activeSlug, setActiveSlug] = useState(() => sessionStorage.getItem('preleaf:active') || null);
+  const hash = useHashRoute();
+  const { view, slug } = parseRoute(hash);
 
-  useEffect(() => {
-    if (activeSlug) sessionStorage.setItem('preleaf:active', activeSlug);
-    else sessionStorage.removeItem('preleaf:active');
-  }, [activeSlug]);
-
-  if (activeSlug) {
-    return <Editor slug={activeSlug} onBack={() => setActiveSlug(null)} />;
+  if (view === 'editor' && slug) {
+    return <Editor key={slug} slug={slug} onBack={() => navigate('#/')} />;
   }
-  return <ProjectList onOpen={(slug) => setActiveSlug(slug)} />;
+  return <ProjectList onOpen={(s) => navigate(`#/p/${s}`)} />;
 }

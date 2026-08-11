@@ -1,4 +1,5 @@
 import React from 'react';
+import { XIcon } from './icons.jsx';
 
 export default function TabsBar({ tabs, activePath, onSelect, onClose }) {
   if (tabs.length === 0) return null;
@@ -14,12 +15,14 @@ export default function TabsBar({ tabs, activePath, onSelect, onClose }) {
           {t.dirty && <span className="dirty-dot" title="Unsaved changes" />}
           <span
             className="tab-close"
+            role="button"
+            tabIndex={-1}
             onClick={(e) => {
               e.stopPropagation();
               onClose(t.path);
             }}
           >
-            ×
+            <XIcon size={12} />
           </span>
         </button>
       ))}

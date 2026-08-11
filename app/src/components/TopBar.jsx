@@ -1,21 +1,28 @@
 import React, { useState } from 'react';
+import { ArrowLeftIcon, PlayIcon, TerminalIcon, HelpIcon, SearchIcon } from './icons.jsx';
 
 const STATE_LABEL = {
   idle: 'Idle',
-  running: 'Compiling…',
+  running: 'Compiling',
   success: 'Ready',
   error: 'Errors',
 };
 
-export default function TopBar({ project, renaming, setRenaming, onRename, compile, onCompile, onBack, onToggleLog }) {
+export default function TopBar({ project, renaming, setRenaming, onRename, compile, onCompile, onBack, onToggleLog, onOpenPalette, onOpenShortcuts }) {
   const [name, setName] = useState('');
 
   const errCount = compile.errors.length;
   const warnCount = compile.warnings.length;
+  const stateClass =
+    compile.state === 'running' ? 'running' :
+    compile.state === 'success' ? 'success' :
+    compile.state === 'error' ? 'danger' : 'neutral';
 
   return (
     <header className="topbar">
-      <button className="icon-btn back" title="Back to projects" onClick={onBack}>‹</button>
+      <button className="icon-btn" title="Back to projects" onClick={onBack}>
+        <ArrowLeftIcon size={16} />
+      </button>
       {renaming ? (
         <div className="rename-inline">
           <input
@@ -39,16 +46,25 @@ export default function TopBar({ project, renaming, setRenaming, onRename, compi
 
       <div className="topbar-spacer" />
 
-      <div className={`compile-status ${compile.state}`}>
+      <span className={`status-pill ${stateClass}`}>
         <span className="dot" />
         {STATE_LABEL[compile.state]}
-        {errCount > 0 && <span className="count err">{errCount} error{errCount > 1 ? 's' : ''}</span>}
-        {warnCount > 0 && <span className="count warn">{warnCount}</span>}
-      </div>
+      </span>
+      {errCount > 0 && <span className="status-pill danger">{errCount} error{errCount > 1 ? 's' : ''}</span>}
+      {warnCount > 0 && <span className="status-pill warning">{warnCount} warn</span>}
 
-      <button className="btn sm" onClick={onToggleLog}>Log</button>
+      <button className="icon-btn" title="Toggle log" onClick={onToggleLog}>
+        <TerminalIcon size={15} />
+      </button>
+      <button className="icon-btn" title="Command palette (Ctrl+K)" onClick={onOpenPalette}>
+        <SearchIcon size={15} />
+      </button>
+      <button className="icon-btn" title="Keyboard shortcuts" onClick={onOpenShortcuts}>
+        <HelpIcon size={15} />
+      </button>
       <button className="btn primary" onClick={onCompile} disabled={compile.state === 'running'}>
-        {compile.state === 'running' ? 'Compiling…' : 'Recompile'}
+        <PlayIcon size={13} />
+        {compile.state === 'running' ? 'Compiling' : 'Recompile'}
       </button>
     </header>
   );

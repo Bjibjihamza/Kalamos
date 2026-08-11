@@ -10,6 +10,7 @@
     "build:app": "npm --prefix app install && npm --prefix app run build",
     "build": "npm run build:server && npm run build:app",
     "start": "npm --prefix server run start",
+    "test": "npm --prefix server run test && npm --prefix app run test",
     "docker:build": "docker compose build",
     "docker:up": "docker compose up -d --build",
     "docker:down": "docker compose down"
