@@ -19,9 +19,9 @@ services:
       - latex
     environment:
       - KALAMOS_LATEX_CONTAINER=kalamos-latex
-      - KALAMOS_PORT=4000
+      - KALAMOS_PORT=4001
     ports:
-      - "4000:4000"
+      - "4001:4001"
     volumes:
       - ./projects:/app/projects
       - /var/run/docker.sock:/var/run/docker.sock

@@ -51,6 +51,8 @@ docker-compose.yml
 - Monaco editor with tabs, debounced auto-save, and inline compile diagnostics
 - LaTeX compilation in a TeX Live Docker container (pdflatex **and** XeLaTeX,
   latexmk, biber, SyncTeX)
+- All projects use the shared `kalamos-latex` runner; a project `.latexmkrc`
+  only selects its LaTeX engine and project-specific options
 - pdf.js PDF viewer: zoom, pagination, download, and SyncTeX click-to-source
 - Command palette (Ctrl+K), keyboard shortcuts, toast notifications
 - Live compile log with parsed errors / warnings
