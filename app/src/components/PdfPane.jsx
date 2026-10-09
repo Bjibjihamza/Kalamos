@@ -9,7 +9,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
 const MIN_ZOOM = 0.5;
 const MAX_ZOOM = 3;
 
-export default function PdfPane({ slug, pdfKey, compileState, focusPage, onSynctex }) {
+export default function PdfPane({ slug, pdfKey, pdfName = 'main.pdf', compileState, focusPage, onSynctex }) {
   const [pdf, setPdf] = useState(null);
   const [error, setError] = useState(null);
   const [pageCount, setPageCount] = useState(0);
@@ -41,7 +41,7 @@ export default function PdfPane({ slug, pdfKey, compileState, focusPage, onSynct
     loadingTaskRef.current?.destroy();
     loadingTaskRef.current = null;
     pdfRef.current = null;
-    const src = api.pdfUrl(slug, pdfKey);
+    const src = api.pdfUrl(slug, pdfKey, pdfName);
     const task = pdfjsLib.getDocument({ url: src });
     loadingTaskRef.current = task;
     task.promise
@@ -162,7 +162,7 @@ export default function PdfPane({ slug, pdfKey, compileState, focusPage, onSynct
                 <PlusIcon size={14} />
               </button>
               {pageCount > 0 && <span className="pdf-page-ind">{currentPage} / {pageCount}</span>}
-              <a className="icon-btn" title="Download PDF" href={api.pdfUrl(slug, pdfKey)} download="main.pdf">
+              <a className="icon-btn" title="Download PDF" href={api.pdfUrl(slug, pdfKey, pdfName)} download={pdfName}>
                 <DownloadIcon size={14} />
               </a>
             </>

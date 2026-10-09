@@ -58,6 +58,6 @@ export const api = {
   synctexView: (slug, file, line) =>
     request('GET', `/projects/${encodeURIComponent(slug)}/synctex/view?file=${encodeURIComponent(file)}&line=${line}`),
 
-  pdfUrl: (slug, cacheBust) =>
-    `/api/projects/${encodeURIComponent(slug)}/build/main.pdf?t=${cacheBust || Date.now()}`,
+  pdfUrl: (slug, cacheBust, pdfName = 'main.pdf') =>
+    `/api/projects/${encodeURIComponent(slug)}/build/${encodeURIComponent(pdfName)}?t=${cacheBust || Date.now()}`,
 };

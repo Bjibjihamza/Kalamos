@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { HIDDEN_DIRS, META_FILE } from '../config.js';
+import { HIDDEN_DIRS, HIDDEN_FILE_EXTS, META_FILE } from '../config.js';
 import { HttpError } from '../http.js';
 import { projectPath, getProject } from './projects.js';
 
@@ -32,12 +32,14 @@ function resolveSafe(root, rel) {
 function walk(dir, base) {
   const entries = [];
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (HIDDEN_DIRS.has(entry.name)) continue;
     const full = path.join(dir, entry.name);
     const rel = base ? `${base}/${entry.name}` : entry.name;
     if (entry.isDirectory()) {
+      if (HIDDEN_DIRS.has(entry.name)) continue;
       entries.push({ name: entry.name, type: 'folder', path: rel, children: walk(full, rel) });
     } else {
+      const ext = entry.name.split('.').slice(1).join('.');
+      if (HIDDEN_FILE_EXTS.has(ext.toLowerCase())) continue;
       let size = 0;
       try { size = fs.statSync(full).size; } catch {}
       entries.push({ name: entry.name, type: 'file', path: rel, size });

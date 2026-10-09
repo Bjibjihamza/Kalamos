@@ -13,5 +13,10 @@ export const DOCKER_CONTAINER = process.env.KALAMOS_LATEX_CONTAINER || 'kalamos-
 export const COMPOSE_FILE = path.join(ROOT, 'docker-compose.yml');
 
 export const HIDDEN_DIRS = new Set(['.preleaf', '.build', '.git', 'node_modules']);
+export const HIDDEN_FILE_EXTS = new Set([
+  'aux', 'log', 'fls', 'fdb_latexmk', 'out', 'toc', 'lof', 'lot',
+  'bbl', 'blg', 'bcf', 'run.xml', 'nav', 'snm', 'vrb', 'xdv',
+  'synctex.gz', 'synctex',
+]);
 export const META_FILE = '.preleaf/meta.json';
 export const DEFAULT_MAIN = 'main.tex';

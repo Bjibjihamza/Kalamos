@@ -1,7 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { projectPath, getProject } from './projects.js';
-import { DOCKER_CONTAINER, DEFAULT_MAIN } from '../config.js';
+import { DOCKER_CONTAINER } from '../config.js';
 import { HttpError } from '../http.js';
 
 function run(slug, args) {
@@ -45,8 +45,11 @@ function parseSyncTeX(out) {
 }
 
 // PDF click -> source (inverse / "edit")
-export function pdfToSource(slug, { page, x, y, pdf = `${DEFAULT_MAIN.replace(/\.tex$/, '')}.pdf` }) {
-  const pdfRel = path.posix.join('.build', pdf);
+export function pdfToSource(slug, { page, x, y, pdf } = {}) {
+  const project = getProject(slug);
+  if (!project) throw new HttpError(404, 'Project not found');
+  const pdfName = pdf || `${path.basename(project.mainFile).replace(/\.tex$/, '')}.pdf`;
+  const pdfRel = path.posix.join('.build', pdfName);
   const result = run(slug, ['synctex', 'edit', '-o', `${page}:${x}:${y}:${pdfRel}`, '-d', '-1']);
   const block = result.blocks && result.blocks[0];
   if (!block) throw new HttpError(404, 'No SyncTeX match');
@@ -63,7 +66,10 @@ function toRelativePath(slug, input) {
 
 // source line -> PDF (forward / "view")
 export function sourceToPdf(slug, { file, line, col = 1 }) {
-  const result = run(slug, ['synctex', 'view', '-i', `${line}:${col}:${file}`, '-o', `.build/${DEFAULT_MAIN.replace(/\.tex$/, '')}.pdf`, '-d', '-1']);
+  const project = getProject(slug);
+  if (!project) throw new HttpError(404, 'Project not found');
+  const pdfName = `${path.basename(project.mainFile).replace(/\.tex$/, '')}.pdf`;
+  const result = run(slug, ['synctex', 'view', '-i', `${line}:${col}:${file}`, '-o', `.build/${pdfName}`, '-d', '-1']);
   const block = result.blocks && result.blocks[0];
   if (!block) throw new HttpError(404, 'No SyncTeX match');
   return {

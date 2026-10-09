@@ -285,6 +285,11 @@ export default function Editor({ slug, onBack }) {
 
   const activeTab = tabs.find((t) => t.path === activePath) || null;
   const activeSaveState = activeTab ? saveStates[activeTab.path] || (activeTab.dirty ? 'dirty' : 'saved') : null;
+  const pdfName = useMemo(() => {
+    const mf = project?.mainFile;
+    if (!mf) return 'main.pdf';
+    return `${mf.replace(/\.tex$/i, '').split('/').pop()}.pdf`;
+  }, [project]);
 
   return (
     <div className="editor">
@@ -321,7 +326,7 @@ export default function Editor({ slug, onBack }) {
             compileMs={compileMs}
           />
         </div>
-        <PdfPane slug={slug} pdfKey={pdfKey} compileState={compile.state} focusPage={focusPage} onSynctex={handleSynctex} />
+        <PdfPane slug={slug} pdfKey={pdfKey} pdfName={pdfName} compileState={compile.state} focusPage={focusPage} onSynctex={handleSynctex} />
       </div>
       {showLog && <LogPanel compile={compile} onClose={() => setShowLog(false)} onJump={openTab} />}
       {showPalette && <CommandPalette actions={paletteActions} onClose={() => setShowPalette(false)} />}

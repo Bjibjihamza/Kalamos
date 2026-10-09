@@ -137,10 +137,11 @@ async function runCompile(job) {
     events.emit('compile:log', { slug, jobId: id, text: `[stderr] ${stderrChunk}` });
   }
 
-  const parsed = parseLog(path.join(buildDir(slug), `${mainFile.replace(/\.tex$/, '')}.log`));
+  const baseName = path.basename(mainFile).replace(/\.tex$/, '');
+  const parsed = parseLog(path.join(buildDir(slug), `${baseName}.log`));
   const errors = parsed.errors.length ? parsed.errors : liveErrors;
   const warnings = mergeWarnings(parsed.warnings, liveWarnings);
-  const pdfPath = path.join(buildDir(slug), `${mainFile.replace(/\.tex$/, '')}.pdf`);
+  const pdfPath = path.join(buildDir(slug), `${baseName}.pdf`);
   const success = code === 0 && fs.existsSync(pdfPath);
 
   events.emit('compile:done', {

@@ -35,8 +35,8 @@ function writeMeta(slug, meta) {
   fs.writeFileSync(metaPath(slug), JSON.stringify(meta, null, 2));
 }
 
-function buildPdfExists(slug) {
-  const pdf = path.join(projectPath(slug), '.build', `${DEFAULT_MAIN.replace(/\.tex$/, '')}.pdf`);
+function buildPdfExists(slug, mainFile = DEFAULT_MAIN) {
+  const pdf = path.join(projectPath(slug), '.build', `${path.basename(mainFile).replace(/\.tex$/, '')}.pdf`);
   return fs.existsSync(pdf) ? pdf : null;
 }
 
@@ -73,7 +73,8 @@ export function getProject(slug) {
 
 function describeProject(slug, meta) {
   const p = projectPath(slug);
-  const buildPdf = buildPdfExists(slug);
+  const mainFile = meta.mainFile || DEFAULT_MAIN;
+  const buildPdf = buildPdfExists(slug, mainFile);
   let modifiedAt = null;
   try {
     modifiedAt = new Date(fs.statSync(metaPath(slug)).mtime).toISOString();
@@ -82,7 +83,7 @@ function describeProject(slug, meta) {
     slug,
     name: meta.name || slug,
     template: meta.template || null,
-    mainFile: meta.mainFile || DEFAULT_MAIN,
+    mainFile,
     createdAt: meta.createdAt || null,
     modifiedAt,
     hasPdf: !!buildPdf,
