@@ -7,7 +7,6 @@ import Skeleton from './ui/Skeleton.jsx';
 import { useConfirm } from '../context/ConfirmContext.jsx';
 import { useToast } from '../context/ToastContext.jsx';
 import {
-  LeafIcon,
   PlusIcon,
   DocIcon,
   PencilIcon,
@@ -107,7 +106,7 @@ export default function ProjectList({ onOpen }) {
     <div className="home">
       <header className="home-header">
         <h1 className="logo">
-          <span className="logo-mark"><LeafIcon size={14} /></span>
+          <img className="logo-image" src="/Logo.png" alt="" aria-hidden="true" />
           kalamos
         </h1>
         <div className="search-box">

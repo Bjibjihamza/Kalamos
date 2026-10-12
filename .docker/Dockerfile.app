@@ -9,6 +9,7 @@ COPY server/package.json server/package-lock.json server/
 COPY app/package.json app/package-lock.json app/
 RUN npm ci --prefix server && npm ci --prefix app
 
+COPY assets assets
 COPY server server
 COPY app app
 RUN npm --prefix app run build
