@@ -32,7 +32,8 @@ export const api = {
   duplicateProject: (slug) => request('POST', `/projects/${encodeURIComponent(slug)}/duplicate`),
   renameProject: (slug, name) => request('PATCH', `/projects/${encodeURIComponent(slug)}`, { name }),
   deleteProject: (slug) => request('DELETE', `/projects/${encodeURIComponent(slug)}`),
-  compile: (slug) => request('POST', `/projects/${encodeURIComponent(slug)}/compile`),
+  compile: (slug, mainFile) =>
+    request('POST', `/projects/${encodeURIComponent(slug)}/compile`, mainFile ? { mainFile } : undefined),
 
   getTree: (slug) => request('GET', `/projects/${encodeURIComponent(slug)}/tree`),
   readFile: (slug, p) =>

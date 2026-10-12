@@ -14,7 +14,7 @@ export function slugify(name) {
 }
 
 export function projectPath(slug) {
-  if (!/^[a-z0-9][a-z0-9_-]*$/.test(slug)) throw new HttpError(400, 'Invalid project slug');
+  if (!/^[A-Za-z0-9][A-Za-z0-9_-]*$/.test(slug)) throw new HttpError(400, 'Invalid project slug');
   return path.join(PROJECTS_DIR, slug);
 }
 
@@ -26,7 +26,10 @@ function readMeta(slug) {
   try {
     return JSON.parse(fs.readFileSync(metaPath(slug), 'utf8'));
   } catch {
-    return null;
+    // Keep imported project folders visible even when they predate metadata.
+    return fs.existsSync(projectPath(slug))
+      ? { name: slug, template: null, mainFile: DEFAULT_MAIN, createdAt: null }
+      : null;
   }
 }
 

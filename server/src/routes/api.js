@@ -102,7 +102,7 @@ router.post('/projects/:slug/upload', upload.single('file'), asyncHandler(async 
 router.post('/projects/:slug/compile', asyncHandler(async (req, res) => {
   const slug = req.params.slug;
   if (!projects.getProject(slug)) throw new HttpError(404, 'Project not found');
-  const job = compile.enqueueCompile(slug);
+  const job = compile.enqueueCompile(slug, req.body?.mainFile);
   res.status(202).json({ slug, jobId: job.id, status: compile.compileStatus() });
 }));
 

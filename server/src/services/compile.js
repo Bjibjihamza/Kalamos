@@ -5,6 +5,7 @@ import { projectPath, getProject } from './projects.js';
 import { DOCKER_CONTAINER, COMPOSE_FILE, DEFAULT_MAIN } from '../config.js';
 import { events } from '../events.js';
 import { execSync } from 'node:child_process';
+import { HttpError } from '../http.js';
 
 let queue = [];
 let running = false;
@@ -12,8 +13,9 @@ let running = false;
 const TEX_DIRS = ['.build', '.latexmkrc'];
 const BUILD_DIR = '.build';
 
-export function enqueueCompile(slug) {
-  const job = { slug, id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}` };
+export function enqueueCompile(slug, requestedMainFile) {
+  const mainFile = resolveMainFile(slug, requestedMainFile);
+  const job = { slug, mainFile, id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}` };
   queue.push(job);
   if (!running) {
     running = true;
@@ -64,11 +66,11 @@ function ensureContainer() {
 }
 
 async function runCompile(job) {
-  const { slug, id } = job;
+  const { slug, id, mainFile: requestedMainFile } = job;
   const project = getProject(slug);
   if (!project) throw new Error('Project not found');
 
-  const mainFile = project.mainFile || DEFAULT_MAIN;
+  const mainFile = requestedMainFile || project.mainFile || DEFAULT_MAIN;
   const root = projectPath(slug);
   fs.mkdirSync(buildDir(slug), { recursive: true });
 
@@ -153,6 +155,20 @@ async function runCompile(job) {
     elapsedMs: Date.now() - started,
     pdfUrl: success ? `/api/projects/${slug}/build/${path.basename(pdfPath)}` : null,
   });
+}
+
+function resolveMainFile(slug, requestedMainFile) {
+  if (!requestedMainFile) return null;
+  const root = projectPath(slug);
+  const clean = String(requestedMainFile).replace(/\\/g, '/');
+  const target = path.resolve(root, clean);
+  if (target !== root && !target.startsWith(`${root}${path.sep}`)) {
+    throw new HttpError(400, 'Invalid main file path');
+  }
+  if (!fs.existsSync(target) || !fs.statSync(target).isFile()) {
+    throw new HttpError(400, 'Main file not found');
+  }
+  return path.relative(root, target).split(path.sep).join('/');
 }
 
 function classifyLine(line, errors, warnings) {

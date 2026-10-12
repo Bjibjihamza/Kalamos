@@ -67,6 +67,22 @@ describe('projects', () => {
     expect(res.body[0]).toHaveProperty('name');
   });
 
+  it('lists imported projects without metadata and preserves uppercase slugs', async () => {
+    const imported = path.join(dataDir, 'CDCs');
+    fs.mkdirSync(imported, { recursive: true });
+    fs.writeFileSync(path.join(imported, 'main.tex'), blankTemplate);
+
+    const res = await request.get('/api/projects');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual(expect.arrayContaining([
+      expect.objectContaining({ slug: 'CDCs', name: 'CDCs' }),
+    ]));
+
+    const project = await request.get('/api/projects/CDCs');
+    expect(project.status).toBe(200);
+    expect(project.body.slug).toBe('CDCs');
+  });
+
   it('renames a project', async () => {
     const res = await request.patch('/api/projects/my-report').send({ name: 'Renamed' });
     expect(res.status).toBe(200);
@@ -151,6 +167,13 @@ describe('files', () => {
 });
 
 describe('compile', () => {
+  it('rejects a main file outside the project', async () => {
+    const res = await request
+      .post('/api/projects/file-test/compile')
+      .send({ mainFile: '../main.tex' });
+    expect(res.status).toBe(400);
+  });
+
   it('enqueues a compile and returns 202', async () => {
     const res = await request.post('/api/projects/file-test/compile');
     expect(res.status).toBe(202);

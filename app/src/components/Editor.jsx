@@ -172,7 +172,8 @@ export default function Editor({ slug, onBack }) {
     setCompile((c) => ({ ...c, log: [], state: 'running' }));
     setShowLog(false);
     try {
-      await api.compile(slug);
+      const mainFile = activePath?.toLowerCase().endsWith('.tex') ? activePath : project?.mainFile;
+      await api.compile(slug, mainFile);
     } catch (e) {
       compilingRef.current = false;
       setCompile((c) => ({ ...c, state: 'error', errors: [{ message: e.message }], log: c.log }));
